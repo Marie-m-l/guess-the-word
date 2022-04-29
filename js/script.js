@@ -19,6 +19,9 @@ const playAgainButton = document.querySelector(".play-again hide");
 
 //test word for building (ltr pull frm api)
 const word = "magnolia";
+//global const array 4 all letters guessed
+const alreadyGuessed = [];
+
 //display circle symbol as placeholder for word letters
 const placeholder = function (word) {
     const placeholderLetters = [];
@@ -34,7 +37,44 @@ placeholder(word);
 //Add an Event Listener for the Button
 guessButton.addEventListener('click' , function(e) {
     e.preventDefault();
+    //Empty message paragraph
+    guessedLetters.innerText = "";
     const playerGuess = playerInput.value;
-    console.log(playerGuess);
-    playerGuess.value = ""; //empty the value of the input
-})
+    //Validate Input in the Button Event Handler
+    const goodPlayerGuess = validateInput(playerGuess);
+    if (goodPlayerGuess) {
+        //got letter for pattern
+        makeGuess(goodPlayerGuess);
+        // console.log(playerGuess);
+        playerGuess.value = ""; //empty the value of the input
+    }
+});
+
+//Function to Check Player’s Input
+const validateInput = function (input) {
+    const acceptedLetter = /[a-zA-z]/;
+    if (input.length === 0) {
+        //is the input empty
+        guessedLetters.innerText = "Please enter a letter.";
+    } else if (input.length > 1) {
+        //is the input is more than 1 letter
+        guessedLetters.innerText = "Please enter 1 letter at a time.";
+    } else if (!input.match(acceptedLetter)) {
+        //check if the entered character doesn't match the regular expression pattern(not a letter)
+        guessedLetters.innerText = "Please enter a letter from A-Z";
+    } else {
+        //the input is a letter/character w/i pattern(good guess/valid)
+        return input;
+    }
+};
+
+//Function to Capture Input
+const makeGuess = function (playerGuess) {
+    playerGuess = playerGuess.toUpperCase();
+    if (alreadyGuessed.includes(playerGuess)) {
+        guessedLetters.innerText = `You have already guessed ${alreadyGuessed}; try another letter`;
+    } else {
+        alreadyGuessed.push(playerGuess);
+        console.log(alreadyGuessed);
+    }
+};
