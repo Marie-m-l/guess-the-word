@@ -18,9 +18,11 @@ const guessStatus = document.querySelector(".message");
 const playAgainButton = document.querySelector(".play-again hide");
 
 //test word for building (ltr pull frm api)
-const word = "magnolia";
+let word = "magnolia";
 //global const array 4 all letters guessed
 const alreadyGuessed = [];
+//Global Variable for the Number of Guesses
+let remainingGuesses = 8;
 
 //display circle symbol as placeholder for word letters
 const placeholder = function (word) {
@@ -68,15 +70,16 @@ const validateInput = function (input) {
     }
 };
 
-//Function to Capture Input
+//Function to Capture player Input
 const makeGuess = function (playerGuess) {
     playerGuess = playerGuess.toUpperCase();
     if (alreadyGuessed.includes(playerGuess)) {
-        guessStatus.innerText = `You have already guessed ${alreadyGuessed}; try another letter`;
+        guessStatus.innerText = `You have already guessed ${playerGuess}; try another letter`;
     } else {
         alreadyGuessed.push(playerGuess);
         console.log(alreadyGuessed);
         showAlreadyGuessed();
+        countRemainingGuesses(playerGuess);
         updateWordInProgress(alreadyGuessed);
     }
 };
@@ -109,6 +112,28 @@ const updateWordInProgress = function (alreadyGuessed) {
     // console.log(replacePlaceholderLetters);
     wordInProgress.innerText = replacePlaceholderLetters.join("");
     ifPlayerWin();
+}; 
+
+// Function to Count Guesses Remaining and Display Result
+const countRemainingGuesses = function (playerGuess) {
+    const upperWord = word.toUpperCase();
+    if (!upperWord.includes(playerGuess)) {
+        //bad player guess - 1 guess
+        guessStatus.innerText = `${playerGuess} isn't in ${word}. Guess again 😉`;
+        remainingGuesses -= 1;
+    } else {
+        guessStatus.innerText = `Good Guess! You have ${playerGuess} in your word! What is your next guess?`;
+    }
+
+    //check if there are 0 guesses left(loss)/ 1 guess left
+    if (remainingGuesses === 0) {
+        guessStatus.innerHTML = `The word is <span class="highlight>${word}</span> <br> Better luck next time!. `;
+        spanRemainingGuess.innerText = `no more guesses`;
+    } else if (remainingGuesses === 1) {
+        spanRemainingGuess.innerText = `${remainingGuesses} guess`;
+    } else {
+        spanRemainingGuess. innerText = `${remainingGuesses} guesses`;
+    }
 }; 
 
 //Function to Check If the Player Won
