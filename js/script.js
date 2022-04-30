@@ -13,7 +13,7 @@ const remainingGuess = document.querySelector(".remaining");
 //span inside the paragraph where the remaining guesses will display
 const spanRemainingGuess = document.querySelector(".remaining span");
 //empty paragraph where messages will appear when the player guesses a letter
-const guessedLetters = document.querySelector(".message");
+const guessStatus = document.querySelector(".message");
 //hidden button that will appear prompting the player to play again
 const playAgainButton = document.querySelector(".play-again hide");
 
@@ -38,7 +38,7 @@ placeholder(word);
 guessButton.addEventListener('click' , function(e) {
     e.preventDefault();
     //Empty message paragraph
-    guessedLetters.innerText = "";
+    guessStatus.innerText = "";
     const playerGuess = playerInput.value;
     //Validate Input in the Button Event Handler
     const goodPlayerGuess = validateInput(playerGuess);
@@ -55,13 +55,13 @@ const validateInput = function (input) {
     const acceptedLetter = /[a-zA-z]/;
     if (input.length === 0) {
         //is the input empty
-        guessedLetters.innerText = "Please enter a letter.";
+        guessStatus.innerText = "Please enter a letter.";
     } else if (input.length > 1) {
         //is the input is more than 1 letter
-        guessedLetters.innerText = "Please enter 1 letter at a time.";
+        guessStatus.innerText = "Please enter 1 letter at a time.";
     } else if (!input.match(acceptedLetter)) {
         //check if the entered character doesn't match the regular expression pattern(not a letter)
-        guessedLetters.innerText = "Please enter a letter from A-Z";
+        guessStatus.innerText = "Please enter a letter from A-Z";
     } else {
         //the input is a letter/character w/i pattern(good guess/valid)
         return input;
@@ -72,9 +72,49 @@ const validateInput = function (input) {
 const makeGuess = function (playerGuess) {
     playerGuess = playerGuess.toUpperCase();
     if (alreadyGuessed.includes(playerGuess)) {
-        guessedLetters.innerText = `You have already guessed ${alreadyGuessed}; try another letter`;
+        guessStatus.innerText = `You have already guessed ${alreadyGuessed}; try another letter`;
     } else {
         alreadyGuessed.push(playerGuess);
         console.log(alreadyGuessed);
+        showAlreadyGuessed();
+        updateWordInProgress(alreadyGuessed);
     }
 };
+
+//Function to Show the Guessed Letters
+const showAlreadyGuessed = function () {
+    ul.innerHTML = ""; //empty ul of players guessed lttrs
+    for (let letter of alreadyGuessed) {
+        //create new li 4 lttrs w/i alreadyGuessed array
+        const li = document.createElement("li");
+        li.innerText = letter;
+        ul.append(li);
+    }
+};
+
+//Function to Update the Word in Progress
+const updateWordInProgress = function (alreadyGuessed) {
+    const wordUpper = word.toUpperCase();
+    const wordArray = wordUpper.split("");
+    // console.log(wordArray);
+    const replacePlaceholderLetters = [];
+
+    for (const letter of wordArray) {
+        if(alreadyGuessed.includes(letter)) {
+            replacePlaceholderLetters.push(letter.toUpperCase());
+        } else {
+            replacePlaceholderLetters.push("●");
+        }
+    }
+    // console.log(replacePlaceholderLetters);
+    wordInProgress.innerText = replacePlaceholderLetters.join("");
+    ifPlayerWin();
+}; 
+
+//Function to Check If the Player Won
+const ifPlayerWin = function () {
+    if (word.toUpperCase() === wordInProgress.innerText) {
+        guessStatus.classList.add("win");
+        guessStatus.innerHTML = `<p class="highlight">You guessed the correct word! Congrats!</p>`;
+    }
+}; 
