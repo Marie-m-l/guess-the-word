@@ -24,6 +24,22 @@ const alreadyGuessed = [];
 //Global Variable for the Number of Guesses
 let remainingGuesses = 8;
 
+//Async Function for random word api
+const getWord = async function () {
+    const resp = await fetch(
+        "https://gist.githubusercontent.com/skillcrush-curriculum/7061f1d4d3d5bfe47efbfbcfe42bf57e/raw/5ffc447694486e7dea686f34a6c085ae371b43fe/words.txt"
+        );
+    const words = await resp.text();
+    // console.log(words);
+    const wordArray = words.split("\n");
+    console.log(wordArray);
+    const randomIndexWords = Math.floor(Math.random() * wordArray.length);
+    word = wordArray[randomIndexWords].trim();
+    placeholder(word);
+};
+
+getWord();
+
 //display circle symbol as placeholder for word letters
 const placeholder = function (word) {
     const placeholderLetters = [];
@@ -34,7 +50,7 @@ const placeholder = function (word) {
     wordInProgress.innerText = placeholderLetters.join("");
 };
 
-placeholder(word);
+getWord();
 
 //Add an Event Listener for the Button
 guessButton.addEventListener('click' , function(e) {
@@ -119,7 +135,7 @@ const countRemainingGuesses = function (playerGuess) {
     const upperWord = word.toUpperCase();
     if (!upperWord.includes(playerGuess)) {
         //bad player guess - 1 guess
-        guessStatus.innerText = `${playerGuess} isn't in ${word}. Guess again 😉`;
+        guessStatus.innerText = `${playerGuess} isn't in this word. Guess again 😉`;
         remainingGuesses -= 1;
     } else {
         guessStatus.innerText = `Good Guess! You have ${playerGuess} in your word! What is your next guess?`;
