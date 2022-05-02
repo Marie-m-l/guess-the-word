@@ -20,7 +20,7 @@ const playAgainButton = document.querySelector(".play-again");
 //test word for building (ltr pull frm api)
 let word = "magnolia";
 //global const array 4 all letters guessed
-const alreadyGuessed = [];
+let alreadyGuessed = [];
 //Global Variable for the Number of Guesses
 let remainingGuesses = 10;
 
@@ -180,7 +180,7 @@ playAgainButton.addEventListener("click" , function() {
     //empty txt 4 guessStatus
     alreadyGuessed = [];
     remainingGuesses = 10;
-    spanRemainingGuess.innerText = '${remainingGuesses} guesses';
+    spanRemainingGuess.innerText = `${remainingGuesses} guesses`;
     //empty ul
     ul.innerHTML = "";
     guessStatus.innerText = "";
