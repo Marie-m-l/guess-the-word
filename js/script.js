@@ -170,5 +170,28 @@ const startOver = function () {
         ul.classList.add("hide");
         remainingGuess.classList.add("hide");
         playAgainButton.classList.remove("hide");
-        countRemainingGuesses(playerGuess);
+        // countRemainingGuesses(playerGuess);
     };
+
+//Click Event 4 Play Again Button
+playAgainButton.addEventListener("click" , function() {
+    //reset all to original values   
+    guessStatus.classList.remove("win");
+    //empty txt 4 guessStatus
+    alreadyGuessed = [];
+    remainingGuesses = 10;
+    spanRemainingGuess.innerText = '${remainingGuesses} guesses';
+    //empty ul
+    ul.innerHTML = "";
+    guessStatus.innerText = "";
+
+    //start next game
+    //get new word
+    getWord();
+
+    //show corrct user interface elements
+    guessButton.classList.remove("hide");
+    ul.classList.remove("hide");
+    remainingGuess.classList.remove("hide");
+    playAgainButton.classList.add("hide");
+});
