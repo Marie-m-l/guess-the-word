@@ -52,7 +52,7 @@ const placeholder = function (word) {
 
 getWord();
 
-//Add an Event Listener for the Button
+//Event Listener for the Button
 guessButton.addEventListener('click' , function(e) {
     e.preventDefault();
     //Empty message paragraph
