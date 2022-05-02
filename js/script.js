@@ -15,14 +15,14 @@ const spanRemainingGuess = document.querySelector(".remaining span");
 //empty paragraph where messages will appear when the player guesses a letter
 const guessStatus = document.querySelector(".message");
 //hidden button that will appear prompting the player to play again
-const playAgainButton = document.querySelector(".play-again hide");
+const playAgainButton = document.querySelector(".play-again");
 
 //test word for building (ltr pull frm api)
 let word = "magnolia";
 //global const array 4 all letters guessed
 const alreadyGuessed = [];
 //Global Variable for the Number of Guesses
-let remainingGuesses = 8;
+let remainingGuesses = 10;
 
 //Async Function for random word api
 const getWord = async function () {
@@ -143,8 +143,10 @@ const countRemainingGuesses = function (playerGuess) {
 
     //check if there are 0 guesses left(loss)/ 1 guess left
     if (remainingGuesses === 0) {
-        guessStatus.innerHTML = `The word is <span class="highlight>${word}</span> <br> Better luck next time!. `;
+        guessStatus.innerHTML = `The word is <span class="highlight">${word}</span> Better luck next time!`;
         spanRemainingGuess.innerText = `no more guesses`;
+
+        startOver();
     } else if (remainingGuesses === 1) {
         spanRemainingGuess.innerText = `${remainingGuesses} guess`;
     } else {
@@ -152,10 +154,21 @@ const countRemainingGuesses = function (playerGuess) {
     }
 }; 
 
-//Function to Check If the Player Won
+//Function to Check If the Plaer Won
 const ifPlayerWin = function () {
     if (word.toUpperCase() === wordInProgress.innerText) {
         guessStatus.classList.add("win");
         guessStatus.innerHTML = `<p class="highlight">You guessed the correct word! Congrats!</p>`;
+        
+        startOver();
     }
-}; 
+};
+
+//Function to Hide and Show Elements
+const startOver = function () {
+        guessButton.classList.add("hide");
+        ul.classList.add("hide");
+        remainingGuess.classList.add("hide");
+        playAgainButton.classList.remove("hide");
+        countRemainingGuesses(playerGuess);
+    };
